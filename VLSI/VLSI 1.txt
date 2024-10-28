@@ -1,0 +1,28 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.all;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+Entity alu_4bit is
+Port (a,b : STD_logic_vector(3 downto 0);
+      Op : in STD_logic_vector(2 downto 0);
+      c : out STD_logic_vector (3 downto 0) );
+End alu_4bit;
+
+Architecture behavioral of alu_4bit is 
+Begin
+Process(Op)
+ Begin
+  Case op is
+    When "000" => c <= a+b;
+    When "001" => c <= a-b;
+    When "010" => c <= a AND b;
+    When "011" => c <= a OR b;
+    When "100" => c <= a XOR b;
+    When "101" => c <= a NAND b;
+    When "110" => c <=  a XNOR b;
+    When others => NULL;
+  End case;
+ End process;
+End behavioral;
+

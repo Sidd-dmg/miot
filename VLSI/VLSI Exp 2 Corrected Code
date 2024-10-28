@@ -1,0 +1,51 @@
+VLSI Exp 2 Corrected Code
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.ALL;
+
+entity shiftregtest is
+    Port (
+        din : in  STD_LOGIC_VECTOR (3 downto 0);
+        mode1 : in  STD_LOGIC_VECTOR (1 downto 0);
+        clk : in  STD_LOGIC;
+        rst : in  STD_LOGIC;
+        dout : out  STD_LOGIC_VECTOR (3 downto 0)
+    );
+end shiftregtest;
+
+architecture Behavioral of shiftregtest is
+    signal MSBIN, LSBIN: STD_LOGIC;
+    signal TEMP: STD_LOGIC_VECTOR(3 downto 0);
+signal out1: STD_LOGIC_VECTOR(3 downto 0);
+
+begin
+    MSBIN <= din(3);
+    LSBIN <= din(0);
+
+    process(clk, rst)
+    begin
+        if rst = '1' then
+            out1 <= (others => '0');
+            TEMP <= (others => '0');
+
+        elsif rising_edge(clk) then
+            case mode1 is
+                when "00" =>                             --siso
+                    out1 <= MSBIN & out1(3 downto 1);
+                when "01" =>                             --pipo
+                    out1 <= din;
+                when "10" =>                             --sipo
+                    TEMP <= MSBIN & out1(3 downto 1);
+                    out1 <= TEMP;
+                when "11" =>                             --lsiso
+                    out1 <= out1(2 downto 0) & LSBIN;
+                when others =>
+                    out1 <= (others => '0');
+            end case;
+        end if;
+    end process;
+dout <= out1;
+
+
+end Behavioral;
